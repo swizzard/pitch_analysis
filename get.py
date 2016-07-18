@@ -1,3 +1,4 @@
+from datetime import date
 import os
 
 import pandas as pd
@@ -25,3 +26,9 @@ def load(start, end):
 
 def fmt_fname(start, end):
     return 'pitch_data_{}_{}.csv'.format(start, end)
+
+
+def get():
+    for y in xrange(2008, 2016):
+        scrape_and_save(date(y, 4, 1), date(y, 11, 2))
+
