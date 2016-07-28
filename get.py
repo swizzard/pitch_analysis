@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 
 import pandas as pd
@@ -10,6 +11,7 @@ def scrape_and_save(start, end):
     df = pd.concat([df] + [pd.get_dummies(getattr(df, col), prefix=col)
                            for col in ('type', 'pitch_type', 'event')],
                    axis=1)
+    df = fmt_dates(df)
     fname = 'pitch_data_{}_{}.csv'.format(start, end)
     df.to_csv(fmt_fname(start, end))
     return df
@@ -25,3 +27,12 @@ def load(start, end):
 
 def fmt_fname(start, end):
     return 'pitch_data_{}_{}.csv'.format(start, end)
+
+
+def fmt_date(date_str):
+    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ')
+
+
+def fmt_dates(df):
+    df['dates'] = df['tfs_zulu'].apply(fmt_date)
+    return df
