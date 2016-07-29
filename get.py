@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 import os
 
 import pandas as pd
@@ -29,10 +29,13 @@ def fmt_fname(start, end):
     return 'pitch_data_{}_{}.csv'.format(start, end)
 
 
-def fmt_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ')
-
-
 def fmt_dates(df):
-    df['dates'] = df['tfs_zulu'].apply(fmt_date)
+    df['dates'] = df['tfs_zulu'].apply(
+        lambda date_str: datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ'))
     return df
+
+
+def get():
+    for y in xrange(2008, 2016):
+        scrape_and_save(date(y, 4, 1), date(y, 11, 2))
+
